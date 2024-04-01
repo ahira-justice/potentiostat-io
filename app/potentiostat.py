@@ -8,3 +8,6 @@ def get_measurements() -> tuple[float, float]:
         yield current, voltage
         time.sleep(1)
 
+
+def prime_potentiostat(event: dict) -> None:
+    pass

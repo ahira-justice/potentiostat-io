@@ -9,7 +9,7 @@ import notifications
 from client import start_experiment, post_measurement
 from config import ABLY_API_KEY, CLIENT_ID
 from constants import LOGGING_CONFIG_DIR
-from potentiostat import get_measurements
+from potentiostat import get_measurements, prime_potentiostat
 
 
 async def main():
@@ -29,6 +29,7 @@ def event_handler(message):
 
         experiment_id = event.get("id")
 
+        prime_potentiostat(event)
         started = start_experiment(experiment_id)
         logger.info(f"Starting experiment {experiment_id}...")
 
