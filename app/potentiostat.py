@@ -93,18 +93,24 @@ dac = adafruit_mcp4725.MCP4725(i2c, address=0x60)
 
 # Adjust values for your setup
 VREF = 5.15  # Reference voltage
-TARGET_MIN_V = 1  # Desired minimum voltage
-TARGET_MAX_V = 2.5  # Desired maximum voltage
-NUM_STEPS = 32  # Number of steps for the sweep
+TARGET_MIN_V = 0  # Desired minimum voltage
+TARGET_MAX_V = 0  # Desired maximum voltage
+NUM_STEPS = 0  # Number of steps for the sweep
 DELAY = 3  # Delay between voltage steps (in seconds)
 NUM_READINGS = 5  # Number of readings to take at each step
 
-# Calculate the voltage increment per step
-voltage_step = (TARGET_MAX_V - TARGET_MIN_V) / NUM_STEPS
+voltage_step = 0
 
 
 def prime_potentiostat(event: dict) -> None:
-    pass
+    global TARGET_MIN_V, TARGET_MAX_V, NUM_STEPS, voltage_step
+    
+    TARGET_MIN_V = event.get("start_voltage")
+    TARGET_MAX_V = event.get("end_voltage")
+    voltage_step = event.get("voltage_step")
+
+    # Calculate the number of steps
+    NUM_STEPS = int((TARGET_MAX_V - TARGET_MIN_V) / voltage_step)
 
 
 def get_measurements() -> tuple[float, float]:
