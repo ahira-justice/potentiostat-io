@@ -37,7 +37,7 @@ def event_handler(message):
             return
 
         for current, voltage in get_measurements():
-            logger.info(f"Posting measurement for experiment {experiment_id}: current: {current}, voltage: {voltage}")
+            logger.info(f"Posting measurement for experiment {experiment_id}: current: {current}mA, voltage: {voltage}V")
             posted = post_measurement(experiment_id, current, voltage)
 
             if not posted:
