@@ -6,7 +6,7 @@ from logging.config import fileConfig as configure_logging
 from loguru import logger
 
 import notifications
-from client import start_experiment, post_measurement
+from client import start_experiment, stop_experiment, post_measurement
 from config import ABLY_API_KEY, CLIENT_ID
 from constants import LOGGING_CONFIG_DIR
 from potentiostat import get_measurements, prime_potentiostat
@@ -31,6 +31,7 @@ def event_handler(message):
 
         prime_potentiostat(event)
         started = start_experiment(experiment_id)
+        stopped = False
         logger.info(f"Starting experiment {experiment_id}...")
 
         if not started:
@@ -41,8 +42,13 @@ def event_handler(message):
             posted = post_measurement(experiment_id, current, voltage)
 
             if not posted:
-                logger.info(f"Stopping experiment {experiment_id}")
+                stopped = True
                 break
+        
+        if not stopped:
+            stop_experiment(experiment_id)
+
+        logger.info(f"Stopping experiment {experiment_id}")
     except Exception as ex:
         logger.info(f"Uncaught event handler exception: {ex}")
         raise ex

@@ -22,6 +22,14 @@ def start_experiment(experiment_id: int) -> bool:
     return response.ok
 
 
+def stop_experiment(experiment_id: int) -> bool:
+    url = f"{API_BASE_URL}/{EXPERIMENTS_URL}/{experiment_id}/stop"
+
+    headers = compose_headers()
+
+    requests.put(url, headers=headers)
+
+
 def post_measurement(experiment_id: int, current: float, voltage: float) -> bool:
     url = f"{API_BASE_URL}/{MEASUREMENTS_URL}"
 
