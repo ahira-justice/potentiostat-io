@@ -1,0 +1,4 @@
+# Add the contents of this file to crontab.
+# Run "sudo crontab -e" to access the crontab config.
+
+@reboot sh ~/potentiostat-io/startup.sh >~/potentiostat-io-cron.log 2>&1
